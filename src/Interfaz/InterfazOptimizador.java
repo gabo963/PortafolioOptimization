@@ -101,8 +101,5 @@ public class InterfazOptimizador extends JFrame
 		{
 			e.printStackTrace();
 		}
-
-
 	}
-
 }

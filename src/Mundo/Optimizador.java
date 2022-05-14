@@ -53,7 +53,6 @@ public class Optimizador {
 			e.printStackTrace();
 			throw e;
 		}
-		
 	}
 
 
@@ -88,7 +87,4 @@ public class Optimizador {
 		
 		return data;
 	}
-	
-	
-
 }
