@@ -22,6 +22,8 @@ public class InterfazOptimizador extends JFrame
 	
 	private PanelInfo panelInfo;
 	
+	private PanelOutput panelOutput;
+	
 	public InterfazOptimizador() throws Exception
 	{
 		setTitle("Optimizador de Portafolios") ;
@@ -35,6 +37,9 @@ public class InterfazOptimizador extends JFrame
 		
 		panelInfo = new PanelInfo(this);
 		add( panelInfo, BorderLayout.NORTH );
+		
+		panelOutput = new PanelOutput();
+		add( panelOutput, BorderLayout.CENTER );
 
 	}
 	
@@ -71,10 +76,9 @@ public class InterfazOptimizador extends JFrame
         {
             try 
             {
-            	// se recibe el archivo.
-            	//TODO: Procesar el archivo.
-            	System.out.println( archivo );
             	mundo = new Optimizador( archivo );
+            	panelOutput.actualizar(mundo.colNames(), mundo.data());
+        		
             } 
             catch (Exception e) 
             {

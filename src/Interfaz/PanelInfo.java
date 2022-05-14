@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 public class PanelInfo extends JPanel implements ActionListener 
 {
@@ -21,6 +22,7 @@ public class PanelInfo extends JPanel implements ActionListener
 	public PanelInfo( InterfazOptimizador pPrincipal )
 	{
 		setLayout( new GridLayout( 1,1) );
+		setBorder( new TitledBorder( "Controles:" ) );
 
 		principal = pPrincipal;
 
@@ -28,7 +30,7 @@ public class PanelInfo extends JPanel implements ActionListener
 		btnCargar.setActionCommand( CARGAR );
 		btnCargar.addActionListener( this );
 		add(btnCargar);
-		
+
 
 	}
 

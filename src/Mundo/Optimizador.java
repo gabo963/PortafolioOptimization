@@ -19,10 +19,6 @@ public class Optimizador {
 		{
 			BufferedReader br = new BufferedReader( new FileReader( archivo ));
 			
-			/**
-			 * Empieza en el 2019, y va al futuro.
-			 */
-			
 			line = br.readLine();
 			
 			String[] valores = line.split(",");
@@ -58,6 +54,39 @@ public class Optimizador {
 			throw e;
 		}
 		
+	}
+
+
+	public String[] colNames() 
+	{
+		String[] colNames = new String[acciones.length+1];
+		
+		colNames[0] = "Date";
+		
+		for(int i = 0; i < acciones.length; i++ )
+		{
+			colNames[i+1] = acciones[i].darTicker();
+		}
+		
+		return colNames;
+	}
+
+
+	public String[][] data() 
+	{
+		String[][] data = new String[acciones[0].darRetornos().size()][acciones.length+1];
+		
+		for( int i = 0; i < acciones[0].darRetornos().size(); i++ )
+		{
+			data[i][0] = fechas.get(i);
+			
+			for( int j = 0; j < acciones.length; j++  )
+			{
+				data[i][j+1] = acciones[j].darRetornos().get(i) + "";
+			}
+		}
+		
+		return data;
 	}
 	
 	
