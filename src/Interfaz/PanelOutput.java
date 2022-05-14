@@ -20,11 +20,13 @@ public class PanelOutput extends JPanel
 		setLayout( new BorderLayout() );
 		setBorder( new TitledBorder( "Datos:" ) );
 		tabInfo = new JTable();
+		add(tabInfo, BorderLayout.CENTER);
 		
 	}
 	
 	public void actualizar( String[] colNames, String[][] data )
 	{
+		this.removeAll();
 		tabInfo = new JTable( data, colNames);
 		tabInfo.setPreferredScrollableViewportSize( new Dimension(10, 10) );
 		tabInfo.setFillsViewportHeight(true);
@@ -33,7 +35,10 @@ public class PanelOutput extends JPanel
 		tabInfo.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
         add(sp, BorderLayout.CENTER);
-        updateUI();
+        tabInfo.repaint();
+        this.revalidate();
+        this.repaint();
+        this.updateUI();
 	}
 
 }

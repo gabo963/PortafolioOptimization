@@ -29,4 +29,17 @@ public class Accion
 		return ticker;
 	}
 	
+	public double darRetornoMedio(int indiceInicio, int indiceFin)
+	{
+		double retornoMed = 0;
+		
+		for( int i = indiceInicio; i < indiceFin; i++ )
+		{
+			retornoMed += retornos.get(i);
+		}
+		
+		double n = indiceFin-indiceInicio;
+		retornoMed = (1/n)*retornoMed;	
+		return retornoMed;
+	}	
 }

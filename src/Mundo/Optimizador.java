@@ -87,4 +87,67 @@ public class Optimizador {
 		
 		return data;
 	}
+	
+	//TODO: Optimizacion del port.
+	
+	//TODO: Matriz varcovar.
+	
+	public double[][] calcularVarCovar(int indiceInicio, int indiceFin)
+	{
+		double[][] matriz = new double[acciones.length][acciones.length];
+		double n = indiceFin-indiceInicio;
+		
+		for( int i = 0; i < matriz.length; i++ )
+		{
+			for( int j = 0; j < matriz[0].length; j++ )
+			{
+				int suma = 0;
+				
+				for( int k = indiceInicio; k < indiceFin; k++ )
+				{
+					//TODO: REVISAR ESTE CALCULO
+					suma += (acciones[i].darRetornos().get(k)-acciones[i].darRetornoMedio(indiceInicio, indiceFin))*(acciones[i].darRetornos().get(k)-acciones[j].darRetornoMedio(indiceInicio, indiceFin));
+				}
+				
+				System.out.println(suma);
+				matriz[i][j] = (1/(n-1)) * suma;
+				
+			}
+		}
+		
+		return matriz;
+	}
+	
+	public String[] colVarcoNames() 
+	{
+		String[] colNames = new String[acciones.length+1];
+		
+		colNames[0] = "";
+		
+		for(int i = 0; i < acciones.length; i++ )
+		{
+			colNames[i+1] = acciones[i].darTicker();
+		}
+		
+		return colNames;
+	}
+	
+	public String[][] dataVarCo() 
+	{
+		String[][] data = new String[acciones.length][acciones.length+1];
+		double[][] varco = calcularVarCovar(0, 100);
+		
+		for( int i = 0; i < acciones.length; i++ )
+		{
+			data[i][0] = acciones[i].darTicker();
+			
+			for( int j = 0; j < acciones.length; j++  )
+			{
+				data[i][j+1] = ""+varco[i][j];
+			}
+		}
+		
+		return data;
+	}
+	
 }

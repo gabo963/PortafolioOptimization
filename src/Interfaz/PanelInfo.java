@@ -10,18 +10,19 @@ import javax.swing.border.TitledBorder;
 
 public class PanelInfo extends JPanel implements ActionListener 
 {
-
-	public final static String CARGAR = "Cargar Portafolios";
-
 	private static final long serialVersionUID = 1L;
+	
+	public final static String CARGAR = "Cargar Portafolios";
+	public final static String CALCULAR = "Calcular Optimizacion";
 
 	private InterfazOptimizador principal;
 
 	private JButton btnCargar;
+	private JButton btnCalcu;
 
 	public PanelInfo( InterfazOptimizador pPrincipal )
 	{
-		setLayout( new GridLayout( 1,1) );
+		setLayout( new GridLayout( 1,2) );
 		setBorder( new TitledBorder( "Controles:" ) );
 
 		principal = pPrincipal;
@@ -30,7 +31,11 @@ public class PanelInfo extends JPanel implements ActionListener
 		btnCargar.setActionCommand( CARGAR );
 		btnCargar.addActionListener( this );
 		add(btnCargar);
-
+		
+		btnCalcu = new JButton( CALCULAR );
+		btnCalcu.setActionCommand( CALCULAR );
+		btnCalcu.addActionListener( this );
+		add(btnCalcu);
 
 	}
 
@@ -39,6 +44,10 @@ public class PanelInfo extends JPanel implements ActionListener
 		if( f.getActionCommand() == CARGAR )
 		{
 			principal.cargarArchivo();
+		}
+		if( f.getActionCommand() == CALCULAR )
+		{
+			principal.calcular();
 		}
 
 	}

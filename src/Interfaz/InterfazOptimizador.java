@@ -87,6 +87,11 @@ public class InterfazOptimizador extends JFrame
             }
         }
 	}
+	
+	public void calcular() 
+	{
+		panelOutput.actualizar(mundo.colVarcoNames(), mundo.dataVarCo());
+	}
 
 	public static void main(String[] args) 
 	{
