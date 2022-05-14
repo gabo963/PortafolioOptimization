@@ -1,22 +1,25 @@
 package Mundo;
 
+import java.util.ArrayList;
+
 public class Accion 
 {
 
 	private String ticker;
-	private int[] retornos;
+	private ArrayList<Double> retornos;
 	
 	public Accion( String pticker )
 	{
 		ticker = pticker;
+		retornos = new ArrayList<Double>();
 	}
 	
-	public void asignarRetornos( int[] pRetornos )
+	public void anadirRetornos( double pRetorno )
 	{
-		retornos = pRetornos;
+		retornos.add(pRetorno);
 	}
 	
-	public int[] darRetornos()
+	public ArrayList<Double> darRetornos()
 	{
 		return retornos;
 	}
