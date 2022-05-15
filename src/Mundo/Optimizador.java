@@ -12,7 +12,6 @@ public class Optimizador {
 	private Accion[] acciones;
 	private ArrayList<String> fechas;
 	
-	
 	public Optimizador( File archivo ) throws Exception
 	{
 		try 
@@ -89,7 +88,6 @@ public class Optimizador {
 	}
 	
 	//Estimacion de parametros.
-	
 	public double[][] calcularVarCovar(int indiceInicio, int indiceFin)
 	{
 		double[][] matriz = new double[acciones.length][acciones.length];
@@ -97,14 +95,18 @@ public class Optimizador {
 		
 		for( int i = 0; i < matriz.length; i++ )
 		{
+			double media1 = acciones[i].darRetornoMedio(indiceInicio, indiceFin);
 			for( int j = 0; j < matriz[0].length; j++ )
-			{
+			{	
+				double media2 = acciones[j].darRetornoMedio(indiceInicio, indiceFin);
 				double suma = 0;
 				
 				for( int k = indiceInicio; k < indiceFin; k++ )
 				{
-					suma += (acciones[i].darRetornos().get(k)-acciones[i].darRetornoMedio(indiceInicio, indiceFin))*(acciones[j].darRetornos().get(k)-acciones[j].darRetornoMedio(indiceInicio, indiceFin));
-				}	
+					
+					suma += (acciones[i].darRetornos().get(k)-media1)*(acciones[j].darRetornos().get(k)-media2);
+				}
+				
 				matriz[i][j] = (1/(n-1)) * suma;
 			}
 		}
