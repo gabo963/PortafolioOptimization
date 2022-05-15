@@ -88,9 +88,7 @@ public class Optimizador {
 		return data;
 	}
 	
-	//TODO: Optimizacion del port.
-	
-	//TODO: Matriz varcovar.
+	//Estimacion de parametros.
 	
 	public double[][] calcularVarCovar(int indiceInicio, int indiceFin)
 	{
@@ -101,20 +99,15 @@ public class Optimizador {
 		{
 			for( int j = 0; j < matriz[0].length; j++ )
 			{
-				int suma = 0;
+				double suma = 0;
 				
 				for( int k = indiceInicio; k < indiceFin; k++ )
 				{
-					//TODO: REVISAR ESTE CALCULO
-					suma += (acciones[i].darRetornos().get(k)-acciones[i].darRetornoMedio(indiceInicio, indiceFin))*(acciones[i].darRetornos().get(k)-acciones[j].darRetornoMedio(indiceInicio, indiceFin));
-				}
-				
-				System.out.println(suma);
+					suma += (acciones[i].darRetornos().get(k)-acciones[i].darRetornoMedio(indiceInicio, indiceFin))*(acciones[j].darRetornos().get(k)-acciones[j].darRetornoMedio(indiceInicio, indiceFin));
+				}	
 				matriz[i][j] = (1/(n-1)) * suma;
-				
 			}
 		}
-		
 		return matriz;
 	}
 	
@@ -149,5 +142,7 @@ public class Optimizador {
 		
 		return data;
 	}
+	
+	//TODO: Optimizacion del port.
 	
 }
