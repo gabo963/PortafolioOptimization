@@ -9,8 +9,6 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 
-import com.sun.org.apache.xml.internal.resolver.helpers.Debug;
-
 import Mundo.Optimizador;
 
 public class InterfazOptimizador extends JFrame 
@@ -91,7 +89,16 @@ public class InterfazOptimizador extends JFrame
 	public void calcular() 
 	{
 
-		System.out.println(mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(0, 100)));
+		try 
+		{
+			System.out.println(mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(0, 100)));
+			
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog( this, e.getMessage( ), "Optimización", JOptionPane.ERROR_MESSAGE );
+		}
 
 		panelOutput.actualizar(mundo.colVarcoNames(), mundo.dataVarCo(mundo.calcularVarCovar(0, 100)));
 	}

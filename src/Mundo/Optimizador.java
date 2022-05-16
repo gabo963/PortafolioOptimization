@@ -10,7 +10,7 @@ public class Optimizador {
 	private String line;
 	private Accion[] acciones;
 	private ArrayList<String> fechas;
-	private double[] pesos;
+	private double[][] pesos;
 
 	public Optimizador( File archivo ) throws Exception
 	{
@@ -24,8 +24,8 @@ public class Optimizador {
 
 			// Se inicializan los arreglos
 			acciones = new Accion[ valores.length - 1 ];
-			pesos = new double[ valores.length - 1 ];
-			fechas = new ArrayList<String>();
+			pesos = new double[1][ valores.length - 1 ];
+			fechas = new ArrayList<String>(); 
 
 			/**
 			 * Se crean las acciones con sus tickers.
@@ -33,7 +33,7 @@ public class Optimizador {
 			for( int i = 0; i < acciones.length; i++ )
 			{
 				acciones[i] = new Accion( valores[i+1] );
-				pesos[i] = (1 / Double.valueOf( acciones.length ) );
+				pesos[0][i] = (1 / Double.valueOf( acciones.length ) );
 			}
 
 			while( (line = br.readLine()) != null )
@@ -144,24 +144,14 @@ public class Optimizador {
 		return data;
 	}
 
-	public double calcularRiesgoPortafolio( double[][] varco )
+	public double calcularRiesgoPortafolio( double[][] varco ) throws Exception
 	{
-		double riesgo = 0;
-		double[] primeraMatriz = new double[pesos.length];
+		double[][] riesgo;
 		
-		for( int k = 0; k < pesos.length; k++ )
-		{
-			primeraMatriz[k] = 0;
-			for( int i = 0; i < varco.length; i++ )
-			{
-				primeraMatriz[k] += ( pesos[i]*varco[i][k] );	
-			}
-		}
+		MatrixOperations mo = new MatrixOperations();
 		
-		for( int i = 0; i < primeraMatriz.length; i++ )
-		{
-			riesgo += pesos[i]*primeraMatriz[i];
-		}
-		return Math.pow(riesgo, (1.0/2.0))*Math.sqrt(252);
+		riesgo = mo.dotProduct(mo.dotProduct(pesos, varco), mo.transpose(pesos));
+		
+		return Math.pow(riesgo[0][0], (1.0/2.0))*Math.sqrt(252);
 	}
 }

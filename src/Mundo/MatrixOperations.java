@@ -2,6 +2,11 @@ package Mundo;
 
 public class MatrixOperations {
 
+	public MatrixOperations()
+	{
+		
+	}
+	
 	/**
 	 * Transpone la matriz ingresada.
 	 * @param matrix la matriz a transponer.
@@ -121,6 +126,7 @@ public class MatrixOperations {
 
 		for( int k = 0; k < matrix.length; k++ )
 		{
+			j = 0;
 			for( int l = 0; l< matrix[0].length; l++ )
 			{
 				if( k != x && l != y )
@@ -128,12 +134,18 @@ public class MatrixOperations {
 					result[i][j] = matrix[k][l]; 
 				}
 
-				j += l != y ? 1:0;
+				if( l != y )
+				{
+					j++;
+				}
 			}
 
-			i += k != x ? 1:0;
+			if( k != x )
+			{
+				i++;
+			}
 		}
-
+			
 		return result;
 	}
 
@@ -157,18 +169,20 @@ public class MatrixOperations {
 
 		if( matrix.length == 2 )
 		{
-			return (matrix[0][0]*matrix[1][1]) - matrix[0][1]*matrix[1][0];
+			return (matrix[0][0]*matrix[1][1]) - (matrix[0][1]*matrix[1][0]);
 		}
 
 		double sum = 0;
 
-		for( int i = 0; i < matrix.length; i++ )
+
+		for( int j = 0; j < matrix[0].length; j++ )
 		{
-			for( int j = 0; j < matrix[0].length; j++ )
-			{
-				sum =+ matrix[i][j] * Math.pow( -1.0 , ((i+1)+(j+1))) * determinant( coFactor(matrix, i, j) );
-			}
+			
+			double res = matrix[0][j] * Double.valueOf(Math.pow( -1.0 , ((1.0)+(j+1.0)))) * determinant(coFactor(matrix, 0, j));
+			
+			sum += res;
 		}
+		
 
 		return sum;
 	}
@@ -187,7 +201,7 @@ public class MatrixOperations {
 		{
 			for( int j = 0; j < matrix[0].length; j++ )
 			{
-				result[i][j] = determinant( coFactor(matrix, i, j) );
+				result[i][j] = determinant( coFactor(matrix, i, j) )* Double.valueOf(Math.pow( -1.0 , ((i+1)+(j+1))));
 			}
 		}
 
