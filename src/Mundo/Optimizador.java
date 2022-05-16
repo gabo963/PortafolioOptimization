@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class Optimizador {
 	
-	private String ruta;
 	private String line;
 	private Accion[] acciones;
 	private ArrayList<String> fechas;
+	private double[] pesos;
 	
 	public Optimizador( File archivo ) throws Exception
 	{
@@ -24,6 +24,7 @@ public class Optimizador {
 			
 			// Se inicializan los arreglos
 			acciones = new Accion[ valores.length - 1 ];
+			pesos = new double[ valores.length - 1 ];
 			fechas = new ArrayList<String>();
 			
 			/**
@@ -32,6 +33,7 @@ public class Optimizador {
 			for( int i = 0; i < acciones.length; i++ )
 			{
 				acciones[i] = new Accion( valores[i+1] );
+				pesos[i] = (1/acciones.length);
 			}
 			
 			while( (line = br.readLine()) != null )
@@ -102,11 +104,9 @@ public class Optimizador {
 				double suma = 0;
 				
 				for( int k = indiceInicio; k < indiceFin; k++ )
-				{
-					
+				{	
 					suma += (acciones[i].darRetornos().get(k)-media1)*(acciones[j].darRetornos().get(k)-media2);
 				}
-				
 				matriz[i][j] = (1/(n-1)) * suma;
 			}
 		}
@@ -147,4 +147,29 @@ public class Optimizador {
 	
 	//TODO: Optimizacion del port.
 	
+	public double calcularRiesgoPortafolio( double[][] varCoVar )
+	{
+		double riesgo = 0;
+		
+		double[] primeraMatriz = new double[pesos.length];
+		
+		for( int k = 0; k < pesos.length; k++ )
+		{
+			for( int i = 0; i < varCoVar.length; i++ )
+			{
+				for( int j = 0; j < varCoVar[0].length; j++ )
+				{
+					primeraMatriz[k] += ( pesos[j]*varCoVar[j][i] );
+				}
+			}
+		}
+		
+		for( int i = 0; i < primeraMatriz.length; i++ )
+		{
+			System.out.println(primeraMatriz[i]);
+			riesgo += pesos[i]*primeraMatriz[i];
+		}
+		
+		return riesgo;
+	}
 }

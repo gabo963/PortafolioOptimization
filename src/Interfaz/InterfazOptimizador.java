@@ -17,13 +17,13 @@ public class InterfazOptimizador extends JFrame
 {
 
 	private Optimizador mundo;
-	
+
 	// Paneles.
-	
+
 	private PanelInfo panelInfo;
-	
+
 	private PanelOutput panelOutput;
-	
+
 	public InterfazOptimizador() throws Exception
 	{
 		setTitle("Optimizador de Portafolios") ;
@@ -32,70 +32,73 @@ public class InterfazOptimizador extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		
+
 		// Van los paneles.
-		
+
 		panelInfo = new PanelInfo(this);
 		add( panelInfo, BorderLayout.NORTH );
-		
+
 		panelOutput = new PanelOutput();
 		add( panelOutput, BorderLayout.CENTER );
 
 	}
-	
+
 	public void cargarArchivo()
 	{
 		JFileChooser selectorDeArchivos = new JFileChooser("./" );
-        selectorDeArchivos.setDialogTitle( "Elegir el archivo de Portafolios" );
-        
-        selectorDeArchivos.setFileFilter( new FileFilter() {
+		selectorDeArchivos.setDialogTitle( "Elegir el archivo de Portafolios" );
 
-     	   public String getDescription() {
-     	       return "CSV Files (*.csv)";
-     	   }
+		selectorDeArchivos.setFileFilter( new FileFilter() {
 
-     	   public boolean accept(File f) {
-     	       if (f.isDirectory()) {
-     	           return true;
-     	       } else {
-     	           String filename = f.getName().toLowerCase();
-     	           return filename.endsWith(".csv");
-     	       }
-     	   }
-     	} );
-        
-        File archivo = null;
-        int resultado = selectorDeArchivos.showOpenDialog( this );
+			public String getDescription() {
+				return "CSV Files (*.csv)";
+			}
 
-        if( resultado == JFileChooser.APPROVE_OPTION )
-        {
-            archivo = selectorDeArchivos.getSelectedFile();
-        }
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+					return true;
+				} else {
+					String filename = f.getName().toLowerCase();
+					return filename.endsWith(".csv");
+				}
+			}
+		} );
 
-        if( archivo != null )
-        {
-            try 
-            {
-            	mundo = new Optimizador( archivo );
-            	panelOutput.actualizar(mundo.colNames(), mundo.data());
-        		
-            } 
-            catch (Exception e) 
-            {
-                e.printStackTrace( );
-                JOptionPane.showMessageDialog( this, e.getMessage( ), "Cargar", JOptionPane.WARNING_MESSAGE );
-            }
-        }
+		File archivo = null;
+		int resultado = selectorDeArchivos.showOpenDialog( this );
+
+		if( resultado == JFileChooser.APPROVE_OPTION )
+		{
+			archivo = selectorDeArchivos.getSelectedFile();
+		}
+
+		if( archivo != null )
+		{
+			try 
+			{
+				mundo = new Optimizador( archivo );
+				panelOutput.actualizar(mundo.colNames(), mundo.data());
+
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace( );
+				JOptionPane.showMessageDialog( this, e.getMessage( ), "Cargar", JOptionPane.WARNING_MESSAGE );
+			}
+		}
 	}
-	
+
 	public void calcular() 
 	{
+
+		System.out.println(mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(0, 100)));
+
 		panelOutput.actualizar(mundo.colVarcoNames(), mundo.dataVarCo());
 	}
 
 	public static void main(String[] args) 
 	{
-		
+
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
