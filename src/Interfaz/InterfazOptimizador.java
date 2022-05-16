@@ -93,7 +93,7 @@ public class InterfazOptimizador extends JFrame
 
 		System.out.println(mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(0, 100)));
 
-		panelOutput.actualizar(mundo.colVarcoNames(), mundo.dataVarCo());
+		panelOutput.actualizar(mundo.colVarcoNames(), mundo.dataVarCo(mundo.calcularVarCovar(0, 100)));
 	}
 
 	public static void main(String[] args) 
