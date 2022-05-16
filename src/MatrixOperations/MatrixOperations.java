@@ -1,11 +1,6 @@
-package Mundo;
+package MatrixOperations;
 
 public class MatrixOperations {
-
-	public MatrixOperations()
-	{
-		
-	}
 	
 	/**
 	 * Transpone la matriz ingresada.
@@ -194,6 +189,11 @@ public class MatrixOperations {
 		{
 			for( int j = 0; j < matrix[0].length; j++ )
 			{
+				DeterminantInverse d = new DeterminantInverse(matrix, i, j);
+				
+				Thread t = new Thread(d);
+				t.setName( i+","+j);
+				
 				result[i][j] = determinant( coFactor(matrix, i, j) )* Double.valueOf(Math.pow( -1.0 , ((i+1)+(j+1))));
 			}
 		}

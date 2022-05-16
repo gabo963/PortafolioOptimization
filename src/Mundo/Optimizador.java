@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import MatrixOperations.MatrixOperations;
+
 public class Optimizador {
 
 	private String line;
