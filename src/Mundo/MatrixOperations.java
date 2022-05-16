@@ -1,4 +1,4 @@
-package MatrixOperations;
+package Mundo;
 
 public class MatrixOperations {
 	
@@ -98,7 +98,7 @@ public class MatrixOperations {
 		{
 			for( int j = 0; j < result[0].length; j++ )
 			{
-				result[i][j] = matrix1[i][j] + (matrix1[i][j])*Double.valueOf(signo);
+				result[i][j] = matrix1[i][j] + (matrix2[i][j])*Double.valueOf(signo);
 			}
 		}
 
@@ -176,29 +176,37 @@ public class MatrixOperations {
 	}
 
 	/**
-	 * Invierte la matriz dada por parametro.
+	 * Invierte la matriz dada por parametro utilizando el determinante.
 	 * @param matrix la matriz que se quiere invertir.
 	 * @return la matriz inversa.
 	 * @throws Exception si la matriz no es cuadrada.
 	 */
-	public static double[][] inverse( double[][] matrix ) throws Exception
+	public static double[][] inverseDet( double[][] matrix ) throws Exception
 	{
+		double det = determinant(matrix);
+		
+		if( det == 0 )
+		{
+			throw new Exception("No es invertible");
+		}
+		
+		if( matrix.length == 1 )
+		{
+			matrix[0][0] = 1 / matrix[0][0]; 
+			return matrix;
+		}  
+		
 		double[][] result = new double[matrix.length][matrix[0].length];
 
 		for( int i = 0; i < matrix.length; i++ )
 		{
 			for( int j = 0; j < matrix[0].length; j++ )
-			{
-				DeterminantInverse d = new DeterminantInverse(matrix, i, j);
-				
-				Thread t = new Thread(d);
-				t.setName( i+","+j);
-				
-				result[i][j] = determinant( coFactor(matrix, i, j) )* Double.valueOf(Math.pow( -1.0 , ((i+1)+(j+1))));
+			{	
+				result[i][j] = determinant( coFactor(matrix, i, j) ) * Double.valueOf(Math.pow( -1.0 , ((i+1)+(j+1))));		
 			}
 		}
 
-		result = singleMultiplication(transpose(result), (1/determinant(matrix)));
+		result = singleMultiplication(transpose(result), (1/det));
 
 		return result;
 	}

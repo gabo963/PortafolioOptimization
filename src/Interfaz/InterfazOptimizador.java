@@ -102,17 +102,6 @@ public class InterfazOptimizador extends JFrame
 			double retorno = 0.0008;
 			double[][] pesos = mundo.encontrarPesosOptimos(retorno, indiceInicio, indiceFin);
 			
-			System.out.println(Arrays.deepToString(pesos));
-			
-			double suma = 0;
-			
-			for( int i = 0; i < pesos[0].length; i++ )
-			{
-				suma += pesos[0][i];
-			}
-			
-			System.out.println(suma);
-			
 			System.out.println("Riesgo: " + mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceInicio, indiceFin), pesos));
 			System.out.println("Retorno: " + mundo.calcularRetornoPortafolio(indiceInicio, indiceFin, pesos));
 			

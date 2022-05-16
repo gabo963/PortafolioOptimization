@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-
-import MatrixOperations.MatrixOperations;
+import java.util.Arrays;
 
 public class Optimizador {
 
@@ -187,23 +186,37 @@ public class Optimizador {
 		{
 			a[acciones.length][i] = acciones[i].darRetornoMedio(indiceInicio, indiceFin);
 			a[i][acciones.length] = acciones[i].darRetornoMedio(indiceInicio, indiceFin);
-			a[acciones.length+1][i] = -1;
-			a[i][acciones.length+1] = -1;
+			a[acciones.length+1][i] = -1.0;
+			a[i][acciones.length+1] = -1.0;
 		}
 		
-		a[acciones.length][acciones.length] = 0;
-		a[acciones.length+1][acciones.length] = 0;
-		a[acciones.length][acciones.length+1] = 0;
-		a[acciones.length+1][acciones.length+1] = 0;
+		a[acciones.length][acciones.length] = 0.0;
+		a[acciones.length+1][acciones.length] = 0.0;
+		a[acciones.length][acciones.length+1] = 0.0;
+		a[acciones.length+1][acciones.length+1] = 0.0;
 		
 		//Construccion de la matriz de retorno.
 		
 		double[][] r = new double[varco.length+2][1];
 		
-		r[acciones.length+1][0] = 1;
+		r[acciones.length+1][0] = 1.0;
 		r[acciones.length][0] = retorno;
 		
-		double[][] result = MatrixOperations.dotProduct( MatrixOperations.inverse(a) , r);
+		//Construccion de la matriz de pesos.
+		
+		double[][] x = new double[varco.length+2][1];
+		
+		for( int i = 0; i < varco.length; i++ )
+		{
+			x[i][0] = 1.0/Double.valueOf(varco.length);
+		}
+		
+		x[varco.length][0] = 1.0;
+		x[varco.length+1][0] = 1.0;
+		
+		//Calculo de resultados.
+		
+		double[][] result = conjugateGradient(a, x, r);
 		
 		for( int i = 0; i < acciones.length; i++ )
 		{
@@ -211,6 +224,38 @@ public class Optimizador {
 		}
 		
 		return MatrixOperations.transpose(pesos);
+	}
+	
+	public double[][] conjugateGradient( double[][] Q, double[][] x, double[][] b ) throws Exception
+	{	
+		double[][] s = MatrixOperations.addOrSubstract(b, MatrixOperations.dotProduct(Q, x),-1);
+		double[][] p = s;
+		
+		double e = 0.0000001;
+		
+		int k = 0;
+		
+		while( MatrixOperations.dotProduct(MatrixOperations.transpose(s), s)[0][0] >= e )
+		{
+			
+			double[][] alpha1 = MatrixOperations.dotProduct(MatrixOperations.transpose(s), s);
+			
+			double[][] alpha2 = MatrixOperations.dotProduct(MatrixOperations.dotProduct(MatrixOperations.transpose(p),Q),p);
+			
+			double[][] a = MatrixOperations.dotProduct(alpha1, MatrixOperations.inverseDet(alpha2));
+			
+			x = MatrixOperations.addOrSubstract(x, MatrixOperations.dotProduct(p, a), 1);
+			s = MatrixOperations.addOrSubstract(s, MatrixOperations.dotProduct(MatrixOperations.dotProduct(Q,p),a), -1);
+			
+			double[][] beta1 = MatrixOperations.dotProduct(MatrixOperations.transpose(s), s);
+			double[][] B = MatrixOperations.dotProduct(beta1, MatrixOperations.inverseDet(alpha1));
+			
+			p = MatrixOperations.addOrSubstract(s, MatrixOperations.dotProduct(p, B), 1);
+			
+			k++;
+		}
+		
+		return x;
 	}
 	
 	public String[][] mostrarA( double retorno, int indiceInicio, int indiceFin ) throws Exception
