@@ -14,6 +14,11 @@ import Mundo.Optimizador;
 public class InterfazOptimizador extends JFrame 
 {
 
+	/**
+	 * Serial Version.
+	 */
+	private static final long serialVersionUID = 2960162770155122459L;
+
 	private Optimizador mundo;
 
 	// Paneles.
