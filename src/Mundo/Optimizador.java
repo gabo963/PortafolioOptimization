@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Optimizador {
 
@@ -233,8 +232,6 @@ public class Optimizador {
 		
 		double e = 0.0000001;
 		
-		int k = 0;
-		
 		while( MatrixOperations.dotProduct(MatrixOperations.transpose(s), s)[0][0] >= e )
 		{
 			
@@ -251,8 +248,6 @@ public class Optimizador {
 			double[][] B = MatrixOperations.dotProduct(beta1, MatrixOperations.inverseDet(alpha1));
 			
 			p = MatrixOperations.addOrSubstract(s, MatrixOperations.dotProduct(p, B), 1);
-			
-			k++;
 		}
 		
 		return x;

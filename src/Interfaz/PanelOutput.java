@@ -11,8 +11,6 @@ import javax.swing.border.TitledBorder;
 public class PanelOutput extends JPanel
 {
 
-	private InterfazOptimizador principal;
-
 	private JTable tabInfo;
 
 	public PanelOutput()

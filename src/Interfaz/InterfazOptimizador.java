@@ -2,7 +2,6 @@ package Interfaz;
 
 import java.awt.BorderLayout;
 import java.io.File;
-import java.util.Arrays;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -27,11 +26,13 @@ public class InterfazOptimizador extends JFrame
 	private PanelInfo panelInfo;
 
 	private PanelOutput panelOutput;
+	
+	private PanelResultados panelResultados;
 
 	public InterfazOptimizador() throws Exception
 	{
 		setTitle("Optimizador de Portafolios") ;
-		setSize(700,700);
+		setSize(900,700);
 		setResizable(true);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,6 +45,9 @@ public class InterfazOptimizador extends JFrame
 
 		panelOutput = new PanelOutput();
 		add( panelOutput, BorderLayout.CENTER );
+		
+		panelResultados = new PanelResultados();
+		add(panelResultados, BorderLayout.EAST);
 
 	}
 
@@ -82,7 +86,7 @@ public class InterfazOptimizador extends JFrame
 			{
 				mundo = new Optimizador( archivo );
 				panelOutput.actualizar(mundo.colNames(), mundo.data());
-
+				panelInfo.activarCalcular();
 			} 
 			catch (Exception e) 
 			{
@@ -94,11 +98,10 @@ public class InterfazOptimizador extends JFrame
 
 	public void calcular() 
 	{
-
 		try 
 		{
-			int indiceInicio = 0;
-			int indiceFin = 100;
+			int indiceInicio = 12;
+			int indiceFin = 112;
 			double retorno = 0.0008;
 			double[][] pesos = mundo.encontrarPesosOptimos(retorno, indiceInicio, indiceFin);
 			

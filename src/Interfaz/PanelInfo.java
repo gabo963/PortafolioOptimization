@@ -35,8 +35,14 @@ public class PanelInfo extends JPanel implements ActionListener
 		btnCalcu = new JButton( CALCULAR );
 		btnCalcu.setActionCommand( CALCULAR );
 		btnCalcu.addActionListener( this );
+		btnCalcu.setEnabled(false);
 		add(btnCalcu);
 
+	}
+	
+	public void activarCalcular()
+	{
+		btnCalcu.setEnabled(true);
 	}
 
 	public void actionPerformed(ActionEvent f) 
