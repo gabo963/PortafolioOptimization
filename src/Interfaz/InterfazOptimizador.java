@@ -2,6 +2,7 @@ package Interfaz;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -96,7 +97,27 @@ public class InterfazOptimizador extends JFrame
 
 		try 
 		{
-			System.out.println(mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(0, 100)));
+			int indiceInicio = 0;
+			int indiceFin = 100;
+			double retorno = 0.0008;
+			double[][] pesos = mundo.encontrarPesosOptimos(retorno, indiceInicio, indiceFin);
+			
+			System.out.println(Arrays.deepToString(pesos));
+			
+			double suma = 0;
+			
+			for( int i = 0; i < pesos[0].length; i++ )
+			{
+				suma += pesos[0][i];
+			}
+			
+			System.out.println(suma);
+			
+			System.out.println("Riesgo: " + mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceInicio, indiceFin), pesos));
+			System.out.println("Retorno: " + mundo.calcularRetornoPortafolio(indiceInicio, indiceFin, pesos));
+			
+			//panelOutput.actualizar(mundo.colVarcoNames(), mundo.dataVarCo(mundo.calcularVarCovar(0, 100)));
+			panelOutput.actualizar( mundo.aNames() , mundo.mostrarA(retorno, indiceInicio, indiceFin));
 			
 		} 
 		catch (Exception e) 
@@ -104,13 +125,10 @@ public class InterfazOptimizador extends JFrame
 			e.printStackTrace();
 			JOptionPane.showMessageDialog( this, e.getMessage( ), "Optimización", JOptionPane.ERROR_MESSAGE );
 		}
-
-		panelOutput.actualizar(mundo.colVarcoNames(), mundo.dataVarCo(mundo.calcularVarCovar(0, 100)));
 	}
 
 	public static void main(String[] args) 
 	{
-
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());

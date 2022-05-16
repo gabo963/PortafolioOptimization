@@ -12,7 +12,7 @@ public class MatrixOperations {
 	 * @param matrix la matriz a transponer.
 	 * @return la matriz transpuesta.
 	 */
-	public double[][] transpose( double[][] matrix )
+	public static double[][] transpose( double[][] matrix )
 	{
 		double[][] result = new double[matrix[0].length][matrix.length];
 
@@ -32,7 +32,7 @@ public class MatrixOperations {
 	 * @param constant constante que se quiere multiplicar.
 	 * @return la matriz multiplicada por la constante.
 	 */
-	public double[][] singleMultiplication( double[][] matrix, double constant )
+	public static double[][] singleMultiplication( double[][] matrix, double constant )
 	{
 		double[][] result = new double[matrix.length][matrix[0].length];
 
@@ -54,7 +54,7 @@ public class MatrixOperations {
 	 * @return El resultante del producto punto.
 	 * @throws Exception si las columnas de la matriz 1 no son iguales a las filas de la matriz 2.
 	 */
-	public double[][] dotProduct( double[][] matrix1, double[][] matrix2 ) throws Exception
+	public static double[][] dotProduct( double[][] matrix1, double[][] matrix2 ) throws Exception
 	{
 
 		if( matrix1[0].length != matrix2.length )
@@ -86,7 +86,7 @@ public class MatrixOperations {
 	 * @return el resultado de la suma de las dos matrices.
 	 * @throws Exception si las matrices no son del mismo tamanio o el |signo| no es igual a 1.
 	 */
-	public double[][] addOrSubstract( double[][] matrix1, double[][] matrix2, int signo ) throws Exception
+	public static double[][] addOrSubstract( double[][] matrix1, double[][] matrix2, int signo ) throws Exception
 	{	
 		if( matrix1.length != matrix2.length || matrix1[0].length != matrix2[0].length )
 		{
@@ -117,7 +117,7 @@ public class MatrixOperations {
 	 * @param j columna donde no esta el cofactor.
 	 * @return el cofactor de la matriz segun las posiciones.
 	 */
-	public double[][] coFactor(double[][] matrix, int x, int y)
+	public static double[][] coFactor(double[][] matrix, int x, int y)
 	{
 		double[][] result = new double[matrix.length-1][matrix[0].length-1];
 
@@ -133,7 +133,6 @@ public class MatrixOperations {
 				{
 					result[i][j] = matrix[k][l]; 
 				}
-
 				if( l != y )
 				{
 					j++;
@@ -145,7 +144,6 @@ public class MatrixOperations {
 				i++;
 			}
 		}
-			
 		return result;
 	}
 
@@ -155,7 +153,7 @@ public class MatrixOperations {
 	 * @return el determinante.
 	 * @throws Exception si la matriz no es cuadrada.
 	 */
-	public double determinant( double[][] matrix ) throws Exception
+	public static double determinant( double[][] matrix ) throws Exception
 	{
 		if( matrix.length != matrix[0].length )
 		{
@@ -173,17 +171,12 @@ public class MatrixOperations {
 		}
 
 		double sum = 0;
-
-
+		
 		for( int j = 0; j < matrix[0].length; j++ )
 		{
-			
-			double res = matrix[0][j] * Double.valueOf(Math.pow( -1.0 , ((1.0)+(j+1.0)))) * determinant(coFactor(matrix, 0, j));
-			
+			double res = matrix[0][j] * Double.valueOf(Math.pow( -1.0 , ((1.0)+(j+1.0)))) * determinant(coFactor(matrix, 0, j));	
 			sum += res;
 		}
-		
-
 		return sum;
 	}
 
@@ -193,7 +186,7 @@ public class MatrixOperations {
 	 * @return la matriz inversa.
 	 * @throws Exception si la matriz no es cuadrada.
 	 */
-	public double[][] inverse( double[][] matrix ) throws Exception
+	public static double[][] inverse( double[][] matrix ) throws Exception
 	{
 		double[][] result = new double[matrix.length][matrix[0].length];
 

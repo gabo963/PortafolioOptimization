@@ -10,7 +10,6 @@ public class Optimizador {
 	private String line;
 	private Accion[] acciones;
 	private ArrayList<String> fechas;
-	private double[][] pesos;
 
 	public Optimizador( File archivo ) throws Exception
 	{
@@ -24,7 +23,6 @@ public class Optimizador {
 
 			// Se inicializan los arreglos
 			acciones = new Accion[ valores.length - 1 ];
-			pesos = new double[1][ valores.length - 1 ];
 			fechas = new ArrayList<String>(); 
 
 			/**
@@ -33,7 +31,6 @@ public class Optimizador {
 			for( int i = 0; i < acciones.length; i++ )
 			{
 				acciones[i] = new Accion( valores[i+1] );
-				pesos[0][i] = (1 / Double.valueOf( acciones.length ) );
 			}
 
 			while( (line = br.readLine()) != null )
@@ -89,7 +86,6 @@ public class Optimizador {
 		return data;
 	}
 
-	//Estimacion de parametros.
 	public double[][] calcularVarCovar(int indiceInicio, int indiceFin)
 	{
 		double[][] matriz = new double[acciones.length][acciones.length];
@@ -144,14 +140,123 @@ public class Optimizador {
 		return data;
 	}
 
-	public double calcularRiesgoPortafolio( double[][] varco ) throws Exception
+	public double calcularRiesgoPortafolio( double[][] varco, double[][] pesos ) throws Exception
 	{
 		double[][] riesgo;
 		
-		MatrixOperations mo = new MatrixOperations();
-		
-		riesgo = mo.dotProduct(mo.dotProduct(pesos, varco), mo.transpose(pesos));
+		riesgo = MatrixOperations.dotProduct(MatrixOperations.dotProduct(pesos, varco), MatrixOperations.transpose(pesos));
 		
 		return Math.pow(riesgo[0][0], (1.0/2.0))*Math.sqrt(252);
 	}
+	
+	public double calcularRetornoPortafolio( int indiceInicio, int indiceFin, double[][] pesos ) throws Exception
+	{
+		double[][] retornos = new double[acciones.length][1];
+		
+		for( int i = 0; i < acciones.length; i++ )
+		{
+			retornos[i][0] = acciones[i].darRetornoMedio(indiceInicio, indiceFin);
+		}
+		
+		retornos = MatrixOperations.dotProduct(pesos,retornos);
+		
+		return retornos[0][0]*252;
+	}
+	
+	public double[][] encontrarPesosOptimos( double retorno, int indiceInicio, int indiceFin ) throws Exception
+	{
+		double[][] pesos = new double[acciones.length][1];
+		
+		double[][] varco = calcularVarCovar(indiceInicio, indiceFin);
+		
+		//Construccion de la matriz A.
+		
+		double[][] a = new double[varco.length+2][varco[0].length+2];
+		
+		for( int i = 0; i < varco.length; i++ )
+		{
+			for( int j = 0; j < varco[0].length; j++ )
+			{
+				a[i][j] = varco[i][j];
+			}
+		}
+		
+		for( int i = 0; i < acciones.length; i++ )
+		{
+			a[acciones.length][i] = acciones[i].darRetornoMedio(indiceInicio, indiceFin);
+			a[i][acciones.length] = acciones[i].darRetornoMedio(indiceInicio, indiceFin);
+			a[acciones.length+1][i] = -1;
+			a[i][acciones.length+1] = -1;
+		}
+		
+		a[acciones.length][acciones.length] = 0;
+		a[acciones.length+1][acciones.length] = 0;
+		a[acciones.length][acciones.length+1] = 0;
+		a[acciones.length+1][acciones.length+1] = 0;
+		
+		//Construccion de la matriz de retorno.
+		
+		double[][] r = new double[varco.length+2][1];
+		
+		r[acciones.length+1][0] = 1;
+		r[acciones.length][0] = retorno;
+		
+		double[][] result = MatrixOperations.dotProduct( MatrixOperations.inverse(a) , r);
+		
+		for( int i = 0; i < acciones.length; i++ )
+		{
+			pesos[i][0] = result[i][0];
+		}
+		
+		return MatrixOperations.transpose(pesos);
+	}
+	
+	public String[][] mostrarA( double retorno, int indiceInicio, int indiceFin ) throws Exception
+	{		
+		double[][] varco = calcularVarCovar(indiceInicio, indiceFin);
+		
+		//Construccion de la matriz A.
+		
+		String[][] a = new String[varco.length+2][varco[0].length+2];
+		
+		for( int i = 0; i < varco.length; i++ )
+		{
+			for( int j = 0; j < varco[0].length; j++ )
+			{
+				a[i][j] = varco[i][j] + "";
+			}
+		}
+		
+		for( int i = 0; i < acciones.length; i++ )
+		{
+			a[acciones.length][i] = acciones[i].darRetornoMedio(indiceInicio, indiceFin)+ "";
+			a[i][acciones.length] = acciones[i].darRetornoMedio(indiceInicio, indiceFin)+ "";
+			a[acciones.length+1][i] = -1+ "";
+			a[i][acciones.length+1] = -1+ "";
+		}
+		
+		a[acciones.length][acciones.length] = 0 +"";
+		a[acciones.length+1][acciones.length] = 0+"";
+		a[acciones.length][acciones.length+1] = 0+"";
+		a[acciones.length+1][acciones.length+1] = 0+"";
+		
+		return a;
+	}
+	
+	public String[] aNames() 
+	{
+		String[] colNames = new String[acciones.length+2];
+
+		for(int i = 0; i < acciones.length; i++ )
+		{
+			colNames[i] = acciones[i].darTicker();
+		}
+		
+		colNames[acciones.length] = "r";
+		colNames[acciones.length+1] = "e";
+
+		return colNames;
+	}
+	
+	
 }
