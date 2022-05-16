@@ -52,6 +52,16 @@ public class Optimizador {
 			throw e;
 		}
 	}
+	
+	public int darTamanoFechas()
+	{
+		return fechas.size();
+	}
+	
+	public String darFecha( int n )
+	{
+		return fechas.get(n);
+	}
 
 
 	public String[] colNames() 
@@ -146,7 +156,7 @@ public class Optimizador {
 		
 		riesgo = MatrixOperations.dotProduct(MatrixOperations.dotProduct(pesos, varco), MatrixOperations.transpose(pesos));
 		
-		return Math.pow(riesgo[0][0], (1.0/2.0))*Math.sqrt(252);
+		return Math.pow(riesgo[0][0], (1.0/2.0))*Math.sqrt(360);
 	}
 	
 	public double calcularRetornoPortafolio( int indiceInicio, int indiceFin, double[][] pesos ) throws Exception
@@ -160,7 +170,7 @@ public class Optimizador {
 		
 		retornos = MatrixOperations.dotProduct(pesos,retornos);
 		
-		return retornos[0][0]*252;
+		return retornos[0][0]*360;
 	}
 	
 	public double[][] encontrarPesosOptimos( double retorno, int indiceInicio, int indiceFin ) throws Exception
@@ -300,5 +310,32 @@ public class Optimizador {
 		return colNames;
 	}
 	
-	
+	public String[] pesosNames() 
+	{
+		String[] colNames = new String[acciones.length+1];
+
+		colNames[0] = "#";
+		
+		for(int i = 0; i < acciones.length; i++ )
+		{
+			colNames[i+1] = acciones[i].darTicker();
+		}
+
+		return colNames;
+	}
+
+	public String[][] pesosTransform(ArrayList<double[]> pesos) {
+		
+		String[][] resultado = new String[pesos.size()][acciones.length+1];
+		
+		for( int i = 0; i < pesos.size(); i++ )
+		{
+			resultado[i][0] = ""+(i+1); 
+			for( int j = 0; j < acciones.length; j++ )
+			{
+				resultado[i][j+1] = pesos.get(i)[j]+"";
+			}
+		}
+		return resultado;
+	}
 }

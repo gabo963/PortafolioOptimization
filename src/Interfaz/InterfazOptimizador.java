@@ -2,6 +2,7 @@ package Interfaz;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -13,7 +14,6 @@ import Mundo.Optimizador;
 
 public class InterfazOptimizador extends JFrame 
 {
-
 	/**
 	 * Serial Version.
 	 */
@@ -32,7 +32,7 @@ public class InterfazOptimizador extends JFrame
 	public InterfazOptimizador() throws Exception
 	{
 		setTitle("Optimizador de Portafolios") ;
-		setSize(900,700);
+		setSize(1000,700);
 		setResizable(true);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +48,6 @@ public class InterfazOptimizador extends JFrame
 		
 		panelResultados = new PanelResultados();
 		add(panelResultados, BorderLayout.EAST);
-
 	}
 
 	public void cargarArchivo()
@@ -98,18 +97,42 @@ public class InterfazOptimizador extends JFrame
 
 	public void calcular() 
 	{
+		panelResultados.reiniciar();
 		try 
 		{
-			int indiceInicio = 12;
-			int indiceFin = 112;
+			int indiceInicio = 0;
+			int indiceFin = 100;
+			int indiceTest = 112;
 			double retorno = 0.0008;
-			double[][] pesos = mundo.encontrarPesosOptimos(retorno, indiceInicio, indiceFin);
+			int saltos = 12;
+			int k = 1;
 			
-			System.out.println("Riesgo: " + mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceInicio, indiceFin), pesos));
-			System.out.println("Retorno: " + mundo.calcularRetornoPortafolio(indiceInicio, indiceFin, pesos));
+			ArrayList<double[]> pesos = new ArrayList<double[]>();
 			
-			//panelOutput.actualizar(mundo.colVarcoNames(), mundo.dataVarCo(mundo.calcularVarCovar(0, 100)));
-			panelOutput.actualizar( mundo.aNames() , mundo.mostrarA(retorno, indiceInicio, indiceFin));
+			while( indiceTest < mundo.darTamanoFechas())
+			{
+				//Optimiza y muestra
+				
+				double[][] peso = mundo.encontrarPesosOptimos(retorno, indiceInicio, indiceFin);
+				pesos.add(peso[0]);
+				
+				String riesgo = (""+(100*mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceFin+1, indiceTest), peso)));
+				String retorno1 = (""+(100*mundo.calcularRetornoPortafolio(indiceFin+1,indiceTest, peso)));
+				String cadena = "Optimizacion # " + k + "\n" + "Periodo in sample:\nFechas: " + mundo.darFecha(indiceInicio) + " - " + mundo.darFecha(indiceFin) + "\n" +
+				"Periodo out of sample:\nFechas: " + mundo.darFecha(indiceFin+1) + " - " + mundo.darFecha(indiceTest) + "\n" + "Para out of sample: (Cifras anuales.)" + "\n" + "Riesgo: " + riesgo.substring(0, riesgo.indexOf(".")+3) + "% \n" +"Retorno: " + retorno1.substring(0, retorno1.indexOf(".")+3) + "%." 
+				+"\n--------------------------------------\n";
+				
+				panelResultados.actualizar(cadena);
+				
+				//Continua
+				
+				indiceInicio += saltos;
+				indiceFin += saltos;
+				indiceTest += saltos;
+				k++;
+			}
+				
+			panelOutput.actualizar(mundo.pesosNames(), mundo.pesosTransform(pesos));
 			
 		} 
 		catch (Exception e) 
@@ -131,5 +154,12 @@ public class InterfazOptimizador extends JFrame
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public void backtesting() 
+	{
+		panelResultados.reiniciar();
+		// TODO: Crear metodo del backtesting.
+		
 	}
 }

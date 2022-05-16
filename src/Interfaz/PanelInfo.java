@@ -14,15 +14,17 @@ public class PanelInfo extends JPanel implements ActionListener
 	
 	public final static String CARGAR = "Cargar Portafolios";
 	public final static String CALCULAR = "Calcular Optimizacion";
+	public final static String BACK = "Backtesting";
 
 	private InterfazOptimizador principal;
 
 	private JButton btnCargar;
 	private JButton btnCalcu;
+	private JButton btnBack;
 
 	public PanelInfo( InterfazOptimizador pPrincipal )
 	{
-		setLayout( new GridLayout( 1,2) );
+		setLayout( new GridLayout( 1,3) );
 		setBorder( new TitledBorder( "Controles:" ) );
 
 		principal = pPrincipal;
@@ -37,12 +39,19 @@ public class PanelInfo extends JPanel implements ActionListener
 		btnCalcu.addActionListener( this );
 		btnCalcu.setEnabled(false);
 		add(btnCalcu);
+		
+		btnBack = new JButton( BACK );
+		btnBack.setActionCommand( BACK );
+		btnBack.addActionListener( this );
+		btnBack.setEnabled(false);
+		add(btnBack);
 
 	}
 	
 	public void activarCalcular()
 	{
 		btnCalcu.setEnabled(true);
+		btnBack.setEnabled(true);
 	}
 
 	public void actionPerformed(ActionEvent f) 
@@ -55,7 +64,9 @@ public class PanelInfo extends JPanel implements ActionListener
 		{
 			principal.calcular();
 		}
-
+		if( f.getActionCommand() == BACK )
+		{
+			principal.backtesting();
+		}
 	}
-
 }
