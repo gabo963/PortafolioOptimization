@@ -109,6 +109,9 @@ public class InterfazOptimizador extends JFrame
 			
 			ArrayList<double[]> pesos = new ArrayList<double[]>();
 			
+			double retProm = 0;
+			double rieProm = 0;
+			
 			while( indiceTest < mundo.darTamanoFechas())
 			{
 				//Optimiza y muestra
@@ -116,8 +119,14 @@ public class InterfazOptimizador extends JFrame
 				double[][] peso = mundo.encontrarPesosOptimos(retorno, indiceInicio, indiceFin);
 				pesos.add(peso[0]);
 				
-				String riesgo = (""+(100*mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceFin+1, indiceTest), peso)));
-				String retorno1 = (""+(100*mundo.calcularRetornoPortafolio(indiceFin+1,indiceTest, peso)));
+				double riesgoNum = mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceFin+1, indiceTest), peso);
+				double retornoNum = mundo.calcularRetornoPortafolio(indiceFin+1,indiceTest, peso);
+				
+				retProm += retornoNum;
+				rieProm += riesgoNum;
+				
+				String riesgo = (""+(100*riesgoNum));
+				String retorno1 = (""+(100*retornoNum));
 				String cadena = "Optimizacion # " + k + "\n" + "Periodo in sample:\nFechas: " + mundo.darFecha(indiceInicio) + " - " + mundo.darFecha(indiceFin) + "\n" +
 				"Periodo out of sample:\nFechas: " + mundo.darFecha(indiceFin+1) + " - " + mundo.darFecha(indiceTest) + "\n" + "Para out of sample: (Cifras anuales.)" + "\n" + "Riesgo: " + riesgo.substring(0, riesgo.indexOf(".")+3) + "% \n" +"Retorno: " + retorno1.substring(0, retorno1.indexOf(".")+3) + "%." 
 				+"\n--------------------------------------\n";
@@ -131,6 +140,16 @@ public class InterfazOptimizador extends JFrame
 				indiceTest += saltos;
 				k++;
 			}
+			
+			retProm = retProm / k * 100;
+			rieProm = rieProm / k * 100;
+			
+			String cadena = "Promedios"+ "\n" + "Para out of sample: (Cifras anuales.)" + "\n" + "Riesgo Promedio: " + (""+rieProm).substring(0, (""+rieProm).indexOf(".")+3) + "% \n" +"Retorno promedio: " + (""+retProm).substring(0, (""+retProm).indexOf(".")+3) + "%." 
+					+"\n--------------------------------------\n";
+					
+					panelResultados.actualizar(cadena);
+			
+			
 				
 			panelOutput.actualizar(mundo.pesosNames(), mundo.pesosTransform(pesos));
 			
@@ -159,7 +178,69 @@ public class InterfazOptimizador extends JFrame
 	public void backtesting() 
 	{
 		panelResultados.reiniciar();
-		// TODO: Crear metodo del backtesting.
 		
+		int ventanaInSample = Integer.parseInt( JOptionPane.showInputDialog(this, "Ingresar la ventana de dias in-sample.") );
+		int ventanaOutOfSample = Integer.parseInt( JOptionPane.showInputDialog(this, "Ingresar la ventana de dias out of sample.") );
+		double retorno = Double.parseDouble( JOptionPane.showInputDialog(this, "Ingresar el retorno objetivo.") );
+		try 
+		{
+			int indiceInicio = 0;
+			int indiceFin = indiceInicio + ventanaInSample;
+			int indiceTest = indiceFin + ventanaOutOfSample;
+			int saltos = ventanaOutOfSample;
+			int k = 1;
+			
+			ArrayList<double[]> pesos = new ArrayList<double[]>();
+			
+			double retProm = 0;
+			double rieProm = 0;
+			
+			while( indiceTest < mundo.darTamanoFechas())
+			{
+				//Optimiza y muestra
+				
+				double[][] peso = mundo.encontrarPesosOptimos(retorno, indiceInicio, indiceFin);
+				pesos.add(peso[0]);
+				
+				double riesgoNum = mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceFin+1, indiceTest), peso);
+				double retornoNum = mundo.calcularRetornoPortafolio(indiceFin+1,indiceTest, peso);
+				
+				retProm += retornoNum;
+				rieProm += riesgoNum;
+				
+				String riesgo = (""+(100*riesgoNum));
+				String retorno1 = (""+(100*retornoNum));
+				String cadena = "Optimizacion # " + k + "\n" + "Periodo in sample:\nFechas: " + mundo.darFecha(indiceInicio) + " - " + mundo.darFecha(indiceFin) + "\n" +
+				"Periodo out of sample:\nFechas: " + mundo.darFecha(indiceFin+1) + " - " + mundo.darFecha(indiceTest) + "\n" + "Para out of sample: (Cifras anuales.)" + "\n" + "Riesgo: " + riesgo.substring(0, riesgo.indexOf(".")+3) + "% \n" +"Retorno: " + retorno1.substring(0, retorno1.indexOf(".")+3) + "%." 
+				+"\n--------------------------------------\n";
+				
+				panelResultados.actualizar(cadena);
+				
+				//Continua
+				
+				indiceInicio += saltos;
+				indiceFin += saltos;
+				indiceTest += saltos;
+				k++;
+			}
+			
+			retProm = retProm / k * 100;
+			rieProm = rieProm / k * 100;
+			
+			String cadena = "Promedios"+ "\n" + "Para out of sample: (Cifras anuales.)" + "\n" + "Riesgo Promedio: " + (""+rieProm).substring(0, (""+rieProm).indexOf(".")+3) + "% \n" +"Retorno promedio: " + (""+retProm).substring(0, (""+retProm).indexOf(".")+3) + "%." 
+					+"\n--------------------------------------\n";
+					
+					panelResultados.actualizar(cadena);
+			
+			
+				
+			panelOutput.actualizar(mundo.pesosNames(), mundo.pesosTransform(pesos));
+			
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog( this, e.getMessage( ), "Optimización", JOptionPane.ERROR_MESSAGE );
+		}
 	}
 }
