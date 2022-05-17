@@ -102,7 +102,6 @@ public class InterfazOptimizador extends JFrame
 		{
 			int indiceInicio = 0;
 			int indiceFin = 100;
-			int indiceTest = 112;
 			double retorno = 0.0008;
 			int saltos = 12;
 			int k = 1;
@@ -112,23 +111,23 @@ public class InterfazOptimizador extends JFrame
 			double retProm = 0;
 			double rieProm = 0;
 			
-			while( indiceTest < mundo.darTamanoFechas())
+			while( indiceFin < mundo.darTamanoFechas())
 			{
 				//Optimiza y muestra
 				
 				double[][] peso = mundo.encontrarPesosOptimos(retorno, indiceInicio, indiceFin);
 				pesos.add(peso[0]);
 				
-				double riesgoNum = mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceFin+1, indiceTest), peso);
-				double retornoNum = mundo.calcularRetornoPortafolio(indiceFin+1,indiceTest, peso);
+				double riesgoNum = mundo.calcularRiesgoPortafolio( mundo.calcularVarCovar(indiceInicio, indiceFin), peso);
+				double retornoNum = mundo.calcularRetornoPortafolio(indiceInicio, indiceFin, peso);
 				
 				retProm += retornoNum;
 				rieProm += riesgoNum;
 				
 				String riesgo = (""+(100*riesgoNum));
 				String retorno1 = (""+(100*retornoNum));
-				String cadena = "Optimizacion # " + k + "\n" + "Periodo in sample:\nFechas: " + mundo.darFecha(indiceInicio) + " - " + mundo.darFecha(indiceFin) + "\n" +
-				"Periodo out of sample:\nFechas: " + mundo.darFecha(indiceFin+1) + " - " + mundo.darFecha(indiceTest) + "\n" + "Para out of sample:cd " + "\n" + "Riesgo: " + riesgo.substring(0, riesgo.indexOf(".")+3) + "% \n" +"Retorno: " + retorno1.substring(0, retorno1.indexOf(".")+3) + "%." 
+				String cadena = "Optimizacion # " + k + "\n" + "Periodo in sample:\nFechas: " + mundo.darFecha(indiceInicio) + " - " + mundo.darFecha(indiceFin) +
+						"\n" + "Para in sample: " + "\n" + "Riesgo: " + riesgo.substring(0, riesgo.indexOf(".")+3) + "% \n" +"Retorno: " + retorno1.substring(0, retorno1.indexOf(".")+3) + "%." 
 				+"\n--------------------------------------\n";
 				
 				panelResultados.actualizar(cadena);
@@ -137,7 +136,6 @@ public class InterfazOptimizador extends JFrame
 				
 				indiceInicio += saltos;
 				indiceFin += saltos;
-				indiceTest += saltos;
 				k++;
 			}
 			
@@ -227,7 +225,7 @@ public class InterfazOptimizador extends JFrame
 			retProm = retProm / k * 100;
 			rieProm = rieProm / k * 100;
 			
-			String cadena = "Promedios"+ "\n" + "Para out of sample: (Cifras anuales.)" + "\n" + "Riesgo Promedio: " + (""+rieProm).substring(0, (""+rieProm).indexOf(".")+3) + "% \n" +"Retorno promedio: " + (""+retProm).substring(0, (""+retProm).indexOf(".")+3) + "%." 
+			String cadena = "Promedios"+ "\n" + "Para out of sample: " + "\n" + "Riesgo Promedio: " + (""+rieProm).substring(0, (""+rieProm).indexOf(".")+3) + "% \n" +"Retorno promedio: " + (""+retProm).substring(0, (""+retProm).indexOf(".")+3) + "%." 
 					+"\n--------------------------------------\n";
 					
 					panelResultados.actualizar(cadena);
