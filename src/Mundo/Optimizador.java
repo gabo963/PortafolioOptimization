@@ -156,7 +156,7 @@ public class Optimizador {
 		
 		riesgo = MatrixOperations.dotProduct(MatrixOperations.dotProduct(pesos, varco), MatrixOperations.transpose(pesos));
 		
-		return Math.pow(riesgo[0][0], (1.0/2.0))*Math.sqrt(360);
+		return Math.pow(riesgo[0][0], (1.0/2.0));
 	}
 	
 	public double calcularRetornoPortafolio( int indiceInicio, int indiceFin, double[][] pesos ) throws Exception
@@ -170,7 +170,7 @@ public class Optimizador {
 		
 		retornos = MatrixOperations.dotProduct(pesos,retornos);
 		
-		return retornos[0][0]*360;
+		return retornos[0][0];
 	}
 	
 	public double[][] encontrarPesosOptimos( double retorno, int indiceInicio, int indiceFin ) throws Exception
@@ -208,8 +208,8 @@ public class Optimizador {
 		
 		double[][] r = new double[varco.length+2][1];
 		
-		r[acciones.length+1][0] = 1.0;
-		r[acciones.length][0] = retorno;
+		r[acciones.length+1][0] = -1.0;
+		r[acciones.length][0] = -retorno;
 		
 		//Construccion de la matriz de pesos.
 		
