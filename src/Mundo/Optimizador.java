@@ -193,8 +193,8 @@ public class Optimizador {
 		
 		for( int i = 0; i < acciones.length; i++ )
 		{
-			a[acciones.length][i] = acciones[i].darRetornoMedio(indiceInicio, indiceFin);
-			a[i][acciones.length] = acciones[i].darRetornoMedio(indiceInicio, indiceFin);
+			a[acciones.length][i] = -acciones[i].darRetornoMedio(indiceInicio, indiceFin);
+			a[i][acciones.length] = -acciones[i].darRetornoMedio(indiceInicio, indiceFin);
 			a[acciones.length+1][i] = -1.0;
 			a[i][acciones.length+1] = -1.0;
 		}
