@@ -128,7 +128,7 @@ public class InterfazOptimizador extends JFrame
 				String riesgo = (""+(100*riesgoNum));
 				String retorno1 = (""+(100*retornoNum));
 				String cadena = "Optimizacion # " + k + "\n" + "Periodo in sample:\nFechas: " + mundo.darFecha(indiceInicio) + " - " + mundo.darFecha(indiceFin) + "\n" +
-				"Periodo out of sample:\nFechas: " + mundo.darFecha(indiceFin+1) + " - " + mundo.darFecha(indiceTest) + "\n" + "Para out of sample:" + "\n" + "Riesgo: " + riesgo.substring(0, riesgo.indexOf(".")+3) + "% \n" +"Retorno: " + retorno1.substring(0, retorno1.indexOf(".")+3) + "%." 
+				"Periodo out of sample:\nFechas: " + mundo.darFecha(indiceFin+1) + " - " + mundo.darFecha(indiceTest) + "\n" + "Para out of sample:cd " + "\n" + "Riesgo: " + riesgo.substring(0, riesgo.indexOf(".")+3) + "% \n" +"Retorno: " + retorno1.substring(0, retorno1.indexOf(".")+3) + "%." 
 				+"\n--------------------------------------\n";
 				
 				panelResultados.actualizar(cadena);
